@@ -1,0 +1,59 @@
+// Deklarasi pin lampu (Merah, Kuning, Hijau)
+int lampu[4][3] = {
+  {0, 1, 2},   // Utara
+  {3, 4, 5},   // Timur
+  {8, 9, 10},  // Selatan
+  {11, 12, 13} // Barat
+};
+
+// Fungsi untuk mematikan semua lampu
+void semuaMerah() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(lampu[i][0], HIGH); // Merah ON
+    digitalWrite(lampu[i][1], LOW);  // Kuning OFF
+    digitalWrite(lampu[i][2], LOW);  // Hijau OFF
+  }
+}
+
+// Fungsi untuk mengaktifkan satu simpang
+void aktifkanSimpang(int arah) {
+  semuaMerah(); // Semua merah dulu
+
+  // Lampu hijau ON
+  digitalWrite(lampu[arah][0], LOW);  // Merah OFF
+  digitalWrite(lampu[arah][2], HIGH); // Hijau ON
+  delay(5000); // 5 detik
+
+  // Lampu kuning berkedip 3 kali
+  digitalWrite(lampu[arah][2], LOW); // Hijau OFF
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(lampu[arah][1], HIGH);
+    delay(500);
+    digitalWrite(lampu[arah][1], LOW);
+    delay(500);
+  }
+
+  // Kuning nyala 2 detik
+  digitalWrite(lampu[arah][1], HIGH);
+  delay(2000);
+  digitalWrite(lampu[arah][1], LOW);
+
+  // Kembali ke merah
+  digitalWrite(lampu[arah][0], HIGH);
+}
+
+void setup() {
+  // Set semua pin sebagai OUTPUT
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 3; j++) {
+      pinMode(lampu[i][j], OUTPUT);
+    }
+  }
+}
+
+void loop() {
+  aktifkanSimpang(0); // Utara
+  aktifkanSimpang(1); // Timur
+  aktifkanSimpang(2); // Selatan
+  aktifkanSimpang(3); // Barat
+}
